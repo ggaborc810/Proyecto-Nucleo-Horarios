@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark UI — Panel de Administración */
+  --bg-primary:    #0F172A;
+  --bg-secondary:  #1E293B;
+  --bg-tertiary:   #334155;
+  --border-color:  #475569;
+
+  /* Acentos */
+  --accent-blue:        #3B82F6;
+  --accent-blue-hover:  #2563EB;
+  --accent-green:       #10B981;
+  --accent-red:         #EF4444;
+  --accent-yellow:      #F59E0B;
+  --accent-purple:      #8B5CF6;
+
+  /* Texto */
+  --text-primary:    #F1F5F9;
+  --text-secondary:  #94A3B8;
+  --text-muted:      #64748B;
+
+  /* Vista pública (claro) */
+  --pub-bg:      #F8FAFC;
+  --pub-card:    #FFFFFF;
+  --pub-border:  #E2E8F0;
+  --pub-text:    #1E293B;
+
+  /* Calendario */
+  --cal-header:               #1E293B;
+  --cal-cell-empty:           #0F172A;
+  --cal-cell-assigned:        #1D4ED8;
+  --cal-cell-conflict:        #7F1D1D;
+  --cal-cell-dragging:        #5B21B6;
+  --cal-cell-hover-valid:     #065F46;
+  --cal-cell-hover-invalid:   #7F1D1D;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

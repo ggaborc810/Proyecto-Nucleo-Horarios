@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horarios — Universidad El Bosque</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary:   #0F172A;
+  --bg-secondary: #1E293B;
+  --bg-tertiary:  #334155;
+  --border-color: #475569;
+  --accent-blue:        #3B82F6;
+  --accent-blue-hover:  #2563EB;
+  --accent-green:       #10B981;
+  --accent-red:         #EF4444;
+  --accent-yellow:      #F59E0B;
+  --accent-purple:      #8B5CF6;
+  --text-primary:   #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted:     #64748B;
+  --pub-bg:     #F8FAFC;
+  --pub-card:   #FFFFFF;
+  --pub-border: #E2E8F0;
+  --pub-text:   #1E293B;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── LOGIN ── */
+#screen-login {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 60% 40%, #1e3a8a22 0%, transparent 70%),
+              var(--bg-primary);
+}
+.login-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 380px;
+  box-shadow: 0 25px 50px rgba(0,0,0,.5);
+}
+.login-logo {
+  display: flex; align-items: center; gap: .75rem;
+  margin-bottom: 1.75rem;
+}
+.logo-badge {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.1rem; color: #fff;
+}
+.login-logo h1 { font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
+.login-logo span { font-size: .78rem; color: var(--text-muted); display: block; }
+.login-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .35rem; }
+.login-sub   { font-size: .85rem; color: var(--text-secondary); margin-bottom: 1.75rem; }
+.form-group  { margin-bottom: 1rem; }
+.form-group label {
+  display: block; font-size: .8rem; font-weight: 600;
+  color: var(--text-secondary); margin-bottom: .45rem;
+}
+.form-input {
+  width: 100%; padding: .65rem .9rem;
+  background: var(--bg-primary); border: 1px solid var(--border-color);
+  border-radius: 8px; color: var(--text-primary); font-size: .9rem;
+  font-family: inherit; outline: none; transition: border-color .2s;
+}
+.form-input:focus { border-color: var(--accent-blue); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .5rem; padding: .65rem 1.2rem;
+  border: none; border-radius: 8px; font-size: .9rem; font-weight: 600;
+  font-family: inherit; cursor: pointer; transition: all .15s;
+}
+.btn-primary {
+  background: var(--accent-blue); color: #fff; width: 100%; margin-top: .5rem;
+}
+.btn-primary:hover { background: var(--accent-blue-hover); }
+.btn-ghost {
+  background: transparent; border: 1px solid var(--border-color);
+  color: var(--text-secondary); width: 100%; margin-top: .6rem; font-size: .82rem;
+}
+.btn-ghost:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.btn-sm { padding: .4rem .8rem; font-size: .8rem; }
+.btn-danger { background: var(--accent-red); color: #fff; }
+.btn-danger:hover { background: #dc2626; }
+.btn-success { background: var(--accent-green); color: #fff; }
+.btn-success:hover { background: #059669; }
+.status-msg {
+  margin-top: .9rem; padding: .6rem .9rem; border-radius: 8px;
+  font-size: .82rem; text-align: center;
+}
+.status-ok  { background: #14532d44; border: 1px solid var(--accent-green); color: #4ade80; }
+.status-err { background: #7f1d1d44; border: 1px solid var(--accent-red);   color: #fca5a5; }
+.status-warn{ background: #71390022; border: 1px solid var(--accent-yellow); color: #fbbf24; }
+.status-info{ background: #1e3a8a44; border: 1px solid var(--accent-blue);  color: #93c5fd; }
+
+/* ── APP LAYOUT ── */
+#screen-app {
+  display: none; height: 100vh;
+  flex-direction: row;
+}
+#screen-app.visible { display: flex; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 220px; min-width: 220px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 1.2rem 1rem; border-bottom: 1px solid var(--border-color);
+  display: flex; align-items: center; gap: .7rem;
+}
+.sidebar-logo .logo-badge { width: 36px; height: 36px; font-size: .9rem; }
+.sidebar-logo h2 { font-size: .9rem; font-weight: 700; line-height: 1.2; }
+.sidebar-logo span { font-size: .7rem; color: var(--text-muted); }
+.sidebar-section {
+  padding: .5rem .75rem .25rem;
+  font-size: .68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--text-muted);
+}
+.nav-item {
+  display: flex; align-items: center; gap: .65rem;
+  padding: .55rem .9rem; margin: .1rem .5rem;
+  border-radius: 8px; font-size: .875rem; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer; transition: all .15s;
+  border: none; background: transparent; width: calc(100% - 1rem);
+  font-family: inherit; text-align: left;
+}
+.nav-item:hover    { background: var(--bg-tertiary); color: var(--text-primary); }
+.nav-item.active   { background: #1d4ed833; color: var(--accent-blue); }
+.nav-item .nav-icon{ font-size: 1rem; width: 18px; text-align: center; }
+.nav-item .nav-badge{
+  margin-left: auto; font-size: .62rem; background: var(--accent-purple);
+  color: #fff; padding: .1rem .45rem; border-radius: 9999px;
+}
+.nav-item.disabled { opacity: .45; cursor: not-allowed; }
+.nav-item.disabled:hover { background: transparent; color: var(--text-secondary); }
+.sidebar-bottom {
+  margin-top: auto; padding: .9rem; border-top: 1px solid var(--border-color);
+}
+.user-chip {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .5rem .6rem; border-radius: 8px;
+  background: var(--bg-primary); margin-bottom: .6rem;
+}
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.user-name  { font-size: .8rem; font-weight: 600; }
+.user-role  { font-size: .68rem; color: var(--text-muted); }
+.api-dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  margin-right: .4rem;
+}
+.api-status { font-size: .72rem; color: var(--text-muted); margin-bottom: .5rem; padding: 0 .2rem; }
+
+/* ── MAIN ── */
+.main-wrap {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden;
+}
+.topbar {
+  height: 56px; min-height: 56px;
+  background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
+  display: flex; align-items: center; padding: 0 1.5rem; gap: 1rem;
+}
+.topbar h2 { font-size: 1.05rem; font-weight: 600; flex: 1; }
+.semestre-badge {
+  background: #14532d44; border: 1px solid #10b98155;
+  color: var(--accent-green); padding: .3rem .8rem; border-radius: 9999px;
+  font-size: .78rem; font-weight: 600;
+}
+.estado-badge {
+  padding: .3rem .75rem; border-radius: 9999px; font-size: .72rem; font-weight: 700;
+}
+.badge-publicado { background: #14532d44; color: #4ade80; border: 1px solid #166534; }
+.badge-borrador  { background: #71390022; color: #fbbf24; border: 1px solid #92400e; }
+.badge-abierto   { background: #14532d44; color: #4ade80; }
+.badge-cerrado   { background: #7f1d1d44; color: #fca5a5; }
+.badge-conv      { background: #1e3a8a44; color: #93c5fd; }
+.badge-lab       { background: #31287844; color: #a78bfa; }
+.badge-taller    { background: #71390044; color: #fcd34d; }
+.badge-tc        { background: #14532d44; color: #6ee7b7; border-radius: 4px; padding: .15rem .5rem; font-size: .72rem; font-weight: 600; }
+.badge-mt        { background: #1e3a8a44; color: #93c5fd; border-radius: 4px; padding: .15rem .5rem; font-size: .72rem; font-weight: 600; }
+.badge-3q        { background: #71390044; color: #fcd34d; border-radius: 4px; padding: .15rem .5rem; font-size: .72rem; font-weight: 600; }
+
+.content-area {
+  flex: 1; overflow-y: auto; padding: 1.75rem 1.5rem;
+}
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── STATS ── */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; padding: 1.2rem 1.3rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.stat-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.stat-num  { font-size: 1.75rem; font-weight: 800; line-height: 1; }
+.stat-lbl  { font-size: .78rem; color: var(--text-secondary); margin-top: .2rem; }
+.i-blue   { background: #1d4ed822; }
+.i-green  { background: #05966922; }
+.i-purple { background: #7c3aed22; }
+.i-yellow { background: #d9770622; }
+.c-blue   { color: #60a5fa; }
+.c-green  { color: #34d399; }
+.c-purple { color: #a78bfa; }
+.c-yellow { color: #fbbf24; }
+
+/* ── INFO CARDS ── */
+.info-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.info-card  {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; padding: 1.2rem 1.3rem;
+}
+.info-card h3 { font-size: .85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1rem; }
+.info-row-item{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .45rem 0; border-bottom: 1px solid #1e293b;
+  font-size: .85rem;
+}
+.info-row-item:last-child { border-bottom: none; }
+.info-row-item .lbl { color: var(--text-secondary); }
+.info-row-item .val { font-weight: 600; color: var(--text-primary); }
+
+/* ── ALERT BOX ── */
+.alert {
+  padding: .8rem 1rem; border-radius: 8px; font-size: .82rem;
+  margin-bottom: 1rem; line-height: 1.5;
+}
+.alert-warn { background: #71390022; border: 1px solid var(--accent-yellow); color: #fbbf24; }
+.alert-info { background: #1e3a8a22; border: 1px solid #3b82f655; color: #93c5fd; }
+.alert-ok   { background: #14532d22; border: 1px solid #10b98155; color: #4ade80; }
+
+/* ── TABLES ── */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.section-header h3 { font-size: 1rem; font-weight: 600; }
+.table-wrap {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; font-size: .855rem; }
+thead th {
+  padding: .75rem 1rem; text-align: left;
+  background: var(--bg-primary);
+  color: var(--text-muted); font-size: .75rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  border-bottom: 1px solid var(--border-color);
+}
+tbody td { padding: .75rem 1rem; border-bottom: 1px solid #1e293b; color: var(--text-secondary); }
+tbody td strong { color: var(--text-primary); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #0f172a55; }
+.td-num { color: var(--text-primary); font-weight: 700; }
+
+/* ── CALENDARIO PLACEHOLDER ── */
+.calendar-grid-demo {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; overflow: hidden;
+}
+.cal-header-row {
+  display: grid; grid-template-columns: 70px repeat(6, 1fr);
+  background: var(--bg-primary); border-bottom: 1px solid var(--border-color);
+}
+.cal-header-cell {
+  padding: .65rem; text-align: center; font-size: .78rem; font-weight: 700;
+  color: var(--text-muted); border-right: 1px solid var(--border-color);
+}
+.cal-row {
+  display: grid; grid-template-columns: 70px repeat(6, 1fr);
+  border-bottom: 1px solid #1e293b;
+}
+.cal-row:last-child { border-bottom: none; }
+.cal-time {
+  padding: .5rem .4rem; text-align: right; font-size: .72rem;
+  color: var(--text-muted); border-right: 1px solid var(--border-color);
+  background: #0f172a55;
+}
+.cal-cell {
+  padding: .3rem; border-right: 1px solid #1e293b; min-height: 44px;
+  position: relative;
+}
+.cal-cell:last-child { border-right: none; }
+.cal-block {
+  background: #1d4ed8; border-radius: 6px; padding: .3rem .5rem;
+  font-size: .7rem; line-height: 1.3; color: #fff;
+}
+.cal-block .cb-curso  { font-weight: 700; }
+.cal-block .cb-aula   { color: #bfdbfe; }
+.cal-block .cb-invalid{ background: #7f1d1d; }
+.cal-empty-msg {
+  text-align: center; padding: 3rem 1rem;
+  color: var(--text-muted); font-size: .9rem;
+}
+.coming-soon {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; padding: 4rem 2rem;
+  text-align: center; color: var(--text-muted);
+}
+.coming-soon .cs-icon { font-size: 3rem; margin-bottom: 1rem; }
+.coming-soon h3 { font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: .5rem; }
+.coming-soon p  { font-size: .85rem; }
+
+/* ── FORM CARD ── */
+.form-card {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; padding: 1.5rem;
+}
+.form-card h3 { font-size: .95rem; font-weight: 600; margin-bottom: 1.25rem; }
+.form-grid-2  { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-label   { font-size: .8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: .4rem; display: block; }
+.form-value   {
+  background: var(--bg-primary); border: 1px solid var(--border-color);
+  border-radius: 8px; padding: .6rem .9rem; font-size: .9rem; color: var(--text-primary);
+}
+.form-divider { border: none; border-top: 1px solid var(--border-color); margin: 1.25rem 0; }
+.generar-result {
+  margin-top: 1rem; padding: 1rem;
+  background: var(--bg-primary); border: 1px solid var(--border-color);
+  border-radius: 10px; font-size: .85rem; color: var(--text-secondary); display: none;
+}
+
+/* ── PÚBLICO ── */
+#page-publico {
+  background: var(--pub-bg); color: var(--pub-text);
+  border-radius: 12px; overflow: hidden;
+}
+.pub-topbar {
+  background: #fff; border-bottom: 1px solid var(--pub-border);
+  padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between;
+}
+.pub-topbar h2 { font-size: 1.05rem; font-weight: 700; color: var(--pub-text); }
+.pub-body { padding: 1.5rem; }
+.pub-filters {
+  display: flex; gap: .75rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+}
+.pub-filter {
+  padding: .45rem .9rem; border: 1px solid var(--pub-border);
+  border-radius: 8px; background: #fff; font-size: .82rem; color: var(--pub-text);
+  cursor: pointer; font-family: inherit;
+}
+.pub-filter.active { border-color: #3b82f6; background: #eff6ff; color: #1d4ed8; }
+.pub-cal-header {
+  display: grid; grid-template-columns: 70px repeat(6, 1fr);
+  background: #f1f5f9; border: 1px solid var(--pub-border); border-radius: 8px 8px 0 0;
+}
+.pub-cal-hcell {
+  padding: .65rem; text-align: center; font-size: .78rem; font-weight: 700;
+  color: #475569; border-right: 1px solid var(--pub-border);
+}
+.pub-cal-body  { border: 1px solid var(--pub-border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
+.pub-cal-row   { display: grid; grid-template-columns: 70px repeat(6, 1fr); border-bottom: 1px solid #f1f5f9; }
+.pub-cal-time  { padding: .5rem .4rem; text-align: right; font-size: .72rem; color: #94a3b8; border-right: 1px solid #f1f5f9; background: #f8fafc; }
+.pub-cal-cell  { border-right: 1px solid #f1f5f9; min-height: 44px; padding: .3rem; }
+.pub-block {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px;
+  padding: .3rem .5rem; font-size: .72rem; line-height: 1.3;
+}
+.pub-block .pb-curso  { font-weight: 700; color: #1d4ed8; }
+.pub-block .pb-info   { color: #3b82f6; }
+.pub-empty-msg { text-align: center; padding: 2.5rem 1rem; color: #94a3b8; font-size: .88rem; }
+
+/* ── SPINNER ── */
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid transparent; border-top-color: currentColor; border-radius: 50%; animation: spin .6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     LOGIN
+══════════════════════════════════════════════ -->
+<div id="screen-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-badge">UEB</div>
+      <div>
+        <h1>Universidad El Bosque</h1>
+        <span>Programa de Ingeniería de Sistemas</span>
+      </div>
+    </div>
+    <div class="login-title">Iniciar sesión</div>
+    <div class="login-sub">Sistema de Generación de Horarios Académicos</div>
+
+    <div class="form-group">
+      <label for="inp-user">Usuario</label>
+      <input class="form-input" id="inp-user" type="text" value="admin" placeholder="usuario">
+    </div>
+    <div class="form-group">
+      <label for="inp-pass">Contraseña</label>
+      <input class="form-input" id="inp-pass" type="password" value="admin123" placeholder="••••••••">
+    </div>
+
+    <button class="btn btn-primary" id="btn-login" onclick="doLogin()">
+      Entrar al sistema
+    </button>
+    <button class="btn btn-ghost" onclick="demoMode()">
+      Ver demo sin backend
+    </button>
+
+    <div id="login-msg" style="display:none" class="status-msg"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     APP
+══════════════════════════════════════════════ -->
+<div id="screen-app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-badge">UEB</div>
+      <div><h2>Horarios</h2><span>Ing. de Sistemas</span></div>
+    </div>
+
+    <div style="padding:.5rem 0; flex:1;">
+      <div class="sidebar-section">Principal</div>
+      <button class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </button>
+
+      <div class="sidebar-section" style="margin-top:.5rem;">Datos maestros</div>
+      <button class="nav-item" id="nav-docentes" onclick="navigate('docentes')">
+        <span class="nav-icon">👥</span> Docentes
+      </button>
+      <button class="nav-item" id="nav-aulas" onclick="navigate('aulas')">
+        <span class="nav-icon">🏛️</span> Aulas
+      </button>
+      <button class="nav-item" id="nav-cursos" onclick="navigate('cursos')">
+        <span class="nav-icon">📚</span> Cursos
+      </button>
+      <button class="nav-item" id="nav-grupos" onclick="navigate('grupos')">
+        <span class="nav-icon">👫</span> Grupos
+      </button>
+      <button class="nav-item" id="nav-parametros" onclick="navigate('parametros')">
+        <span class="nav-icon">⚙️</span> Parámetros
+      </button>
+
+      <div class="sidebar-section" style="margin-top:.5rem;">Horario</div>
+      <button class="nav-item" id="nav-publico" onclick="navigate('publico')">
+        <span class="nav-icon">🌐</span> Vista Pública
+      </button>
+      <button class="nav-item" id="nav-generar" onclick="navigate('generar')">
+        <span class="nav-icon">⚡</span> Generar
+      </button>
+      <button class="nav-item disabled" title="Drag & Drop — Fase 4">
+        <span class="nav-icon">🗓️</span> Calendario
+        <span class="nav-badge">F4</span>
+      </button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="api-status" id="api-status-bar">
+        <span class="api-dot" id="api-dot" style="background:#64748b"></span>
+        <span id="api-status-txt">Sin conexión — modo demo</span>
+      </div>
+      <div class="user-chip">
+        <div class="user-avatar">A</div>
+        <div><div class="user-name">admin</div><div class="user-role">ADMIN</div></div>
+      </div>
+      <button class="btn btn-ghost" style="width:100%;font-size:.78rem;padding:.4rem;" onclick="logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <h2 id="page-title">Dashboard</h2>
+      <span class="semestre-badge">2026-1</span>
+      <span class="estado-badge badge-publicado">PUBLICADO</span>
+    </header>
+
+    <div class="content-area">
+
+      <!-- ── DASHBOARD ── -->
+      <div id="page-dashboard" class="page active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon i-blue"><span style="font-size:1.4rem">👥</span></div>
+            <div>
+              <div class="stat-num c-blue" id="cnt-docentes">4</div>
+              <div class="stat-lbl">Docentes</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon i-green"><span style="font-size:1.4rem">🏛️</span></div>
+            <div>
+              <div class="stat-num c-green" id="cnt-aulas">6</div>
+              <div class="stat-lbl">Aulas</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon i-purple"><span style="font-size:1.4rem">📚</span></div>
+            <div>
+              <div class="stat-num c-purple" id="cnt-cursos">6</div>
+              <div class="stat-lbl">Cursos</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon i-yellow"><span style="font-size:1.4rem">👫</span></div>
+            <div>
+              <div class="stat-num c-yellow" id="cnt-grupos">6</div>
+              <div class="stat-lbl">Grupos activos</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-card">
+            <h3>Semestre activo</h3>
+            <div class="info-row-item"><span class="lbl">Identificador</span><span class="val">2026-1</span></div>
+            <div class="info-row-item"><span class="lbl">Estado del horario</span><span><span class="estado-badge badge-publicado">PUBLICADO</span></span></div>
+            <div class="info-row-item"><span class="lbl">L–V</span><span class="val">07:00 – 22:00</span></div>
+            <div class="info-row-item"><span class="lbl">Sábado</span><span class="val">07:00 – 13:00</span></div>
+            <div class="info-row-item"><span class="lbl">Exclusión mediodía</span><span class="val">12:00 – 13:00</span></div>
+          </div>
+          <div class="info-card">
+            <h3>Estado del motor</h3>
+            <div class="info-row-item"><span class="lbl">HC Evaluadores</span><span class="val" style="color:var(--accent-green)">10 / 10 ✓</span></div>
+            <div class="info-row-item"><span class="lbl">SC Evaluadores</span><span class="val" style="color:var(--accent-green)">2 / 2 ✓</span></div>
+            <div class="info-row-item"><span class="lbl">Tests del motor</span><span class="val" style="color:var(--accent-yellow)">48 escritos — pendiente ejecución</span></div>
+            <div class="info-row-item"><span class="lbl">Franjas en BD</span><span class="val" style="color:var(--accent-red)">⚠ 0 (pendiente generación)</span></div>
+            <div class="info-row-item"><span class="lbl">Motor Greedy</span><span class="val" style="color:var(--accent-blue)">Listo para prueba</span></div>
+          </div>
+        </div>
+
+        <div class="alert alert-warn">
+          ⚠ <strong>Acción requerida:</strong> La tabla <code style="background:#71390066;padding:.1rem .3rem;border-radius:4px">franja_horaria</code> está vacía. El motor no puede generar asignaciones sin franjas. Ve a <strong>Parámetros → Generar Franjas</strong> para resolverlo.
+        </div>
+      </div>
+
+      <!-- ── DOCENTES ── -->
+      <div id="page-docentes" class="page">
+        <div class="section-header">
+          <h3>Docentes</h3>
+          <button class="btn btn-primary btn-sm" onclick="showToast('CRUD completo disponible vía API')">+ Nuevo docente</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Vinculación</th>
+                <th>Horas/sem</th>
+                <th>Email</th>
+                <th>Disponib.</th>
+                <th>Compatib.</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-docentes">
+              <tr><td><strong>Ana María López</strong></td><td>10000001</td><td><span class="badge-tc">TIEMPO COMPLETO</span></td><td class="td-num">20</td><td>ana.lopez@unbosque.edu.co</td><td class="td-num">5</td><td class="td-num">2</td></tr>
+              <tr><td><strong>Carlos Rodríguez</strong></td><td>10000002</td><td><span class="badge-tc">TIEMPO COMPLETO</span></td><td class="td-num">20</td><td>carlos.rodriguez@unbosque.edu.co</td><td class="td-num">3</td><td class="td-num">2</td></tr>
+              <tr><td><strong>María Fernanda Torres</strong></td><td>10000003</td><td><span class="badge-mt">MEDIO TIEMPO</span></td><td class="td-num">10</td><td>maria.torres@unbosque.edu.co</td><td class="td-num">2</td><td class="td-num">2</td></tr>
+              <tr><td><strong>Jorge Herrera</strong></td><td>10000004</td><td><span class="badge-3q">¾ TIEMPO</span></td><td class="td-num">15</td><td>jorge.herrera@unbosque.edu.co</td><td class="td-num">5</td><td class="td-num">2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-info" style="margin-top:.9rem;">
+          ℹ Los datos muestran los 4 docentes del seed inicial. El CRUD completo (crear, editar, eliminar, gestionar disponibilidad) está operativo en la API REST.
+        </div>
+      </div>
+
+      <!-- ── AULAS ── -->
+      <div id="page-aulas" class="page">
+        <div class="section-header">
+          <h3>Aulas</h3>
+          <button class="btn btn-primary btn-sm" onclick="showToast('CRUD completo disponible vía API')">+ Nueva aula</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Tipo</th><th>Capacidad</th><th>Ubicación</th><th>Estado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>A-101</strong></td><td><span class="estado-badge badge-conv">CONVENCIONAL</span></td><td class="td-num">40</td><td>Bloque A piso 1</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">Activa</span></td></tr>
+              <tr><td><strong>A-102</strong></td><td><span class="estado-badge badge-conv">CONVENCIONAL</span></td><td class="td-num">40</td><td>Bloque A piso 1</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">Activa</span></td></tr>
+              <tr><td><strong>B-201</strong></td><td><span class="estado-badge badge-conv">CONVENCIONAL</span></td><td class="td-num">30</td><td>Bloque B piso 2</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">Activa</span></td></tr>
+              <tr><td><strong>LAB-01</strong></td><td><span class="estado-badge badge-lab">LABORATORIO</span></td><td class="td-num">25</td><td>Bloque C piso 1</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">Activa</span></td></tr>
+              <tr><td><strong>LAB-02</strong></td><td><span class="estado-badge badge-lab">LABORATORIO</span></td><td class="td-num">25</td><td>Bloque C piso 1</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">Activa</span></td></tr>
+              <tr><td><strong>TALL-01</strong></td><td><span class="estado-badge badge-taller">TALLER</span></td><td class="td-num">20</td><td>Bloque D piso 1</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">Activa</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── CURSOS ── -->
+      <div id="page-cursos" class="page">
+        <div class="section-header">
+          <h3>Cursos</h3>
+          <button class="btn btn-primary btn-sm" onclick="showToast('CRUD completo disponible vía API')">+ Nuevo curso</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Nombre</th><th>Semestre</th><th>Tipo aula requerida</th><th>Sesiones / semana</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>IS-101</strong></td><td>Fundamentos de Programación</td><td class="td-num">1°</td><td><span class="estado-badge badge-lab">LABORATORIO</span></td><td class="td-num">3</td></tr>
+              <tr><td><strong>IS-201</strong></td><td>Estructuras de Datos</td><td class="td-num">2°</td><td><span class="estado-badge badge-lab">LABORATORIO</span></td><td class="td-num">2</td></tr>
+              <tr><td><strong>IS-301</strong></td><td>Ingeniería de Software I</td><td class="td-num">4°</td><td><span class="estado-badge badge-conv">CONVENCIONAL</span></td><td class="td-num">2</td></tr>
+              <tr><td><strong>IS-401</strong></td><td>Bases de Datos I</td><td class="td-num">4°</td><td><span class="estado-badge badge-conv">CONVENCIONAL</span></td><td class="td-num">2</td></tr>
+              <tr><td><strong>IS-501</strong></td><td>Redes de Computadores</td><td class="td-num">5°</td><td><span class="estado-badge badge-conv">CONVENCIONAL</span></td><td class="td-num">2</td></tr>
+              <tr><td><strong>IS-601</strong></td><td>Sistemas Operativos</td><td class="td-num">6°</td><td><span class="estado-badge badge-conv">CONVENCIONAL</span></td><td class="td-num">3</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── GRUPOS ── -->
+      <div id="page-grupos" class="page">
+        <div class="section-header">
+          <h3>Grupos — Semestre 2026-1</h3>
+          <button class="btn btn-primary btn-sm" onclick="showToast('CRUD completo disponible vía API')">+ Nuevo grupo</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Sección</th><th>Curso</th><th>Docente</th><th>Inscritos</th><th>Estado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>A</strong></td><td>IS-101 — Fundamentos de Programación</td><td>Ana María López</td><td class="td-num">35</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">ABIERTO</span></td></tr>
+              <tr><td><strong>B</strong></td><td>IS-101 — Fundamentos de Programación</td><td>Jorge Herrera</td><td class="td-num">28</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">ABIERTO</span></td></tr>
+              <tr><td><strong>A</strong></td><td>IS-201 — Estructuras de Datos</td><td>Ana María López</td><td class="td-num">30</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">ABIERTO</span></td></tr>
+              <tr><td><strong>A</strong></td><td>IS-301 — Ingeniería de Software I</td><td>Carlos Rodríguez</td><td class="td-num">25</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">ABIERTO</span></td></tr>
+              <tr><td><strong>A</strong></td><td>IS-401 — Bases de Datos I</td><td>Carlos Rodríguez</td><td class="td-num">22</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">ABIERTO</span></td></tr>
+              <tr><td><strong>A</strong></td><td>IS-501 — Redes de Computadores</td><td>María Fernanda Torres</td><td class="td-num">20</td><td><span class="estado-badge badge-publicado" style="font-size:.7rem">ABIERTO</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-info" style="margin-top:.9rem;">
+          ℹ IS-601 (Sistemas Operativos) no tiene grupo asignado en el seed. Se puede crear desde la API.
+        </div>
+      </div>
+
+      <!-- ── PARÁMETROS ── -->
+      <div id="page-parametros" class="page">
+        <div class="section-header">
+          <h3>Parámetros del semestre</h3>
+          <button class="btn btn-primary btn-sm" onclick="generarFranjas()">
+            ⚡ Generar franjas horarias
+          </button>
+        </div>
+        <div class="form-card">
+          <h3>Semestre 2026-1</h3>
+          <div class="form-grid-2">
+            <div>
+              <label class="form-label">Semestre</label>
+              <div class="form-value">2026-1</div>
+            </div>
+            <div>
+              <label class="form-label">Estado</label>
+              <div class="form-value"><span class="estado-badge badge-publicado">ACTIVO</span></div>
+            </div>
+            <div>
+              <label class="form-label">Horario Lunes–Viernes</label>
+              <div class="form-value">07:00 — 22:00</div>
+            </div>
+            <div>
+              <label class="form-label">Horario Sábado</label>
+              <div class="form-value">07:00 — 13:00</div>
+            </div>
+            <div>
+              <label class="form-label">Exclusión mediodía</label>
+              <div class="form-value">12:00 — 13:00</div>
+            </div>
+            <div>
+              <label class="form-label">Cap. máx. grupo</label>
+              <div class="form-value" id="val-capmax">— (por defecto del modelo)</div>
+            </div>
+          </div>
+          <hr class="form-divider">
+          <div id="franja-status" class="alert alert-warn">
+            ⚠ <strong>franja_horaria vacía.</strong> El motor Greedy necesita las franjas para generar candidatos. Haz clic en "Generar franjas horarias" (requiere backend activo).
+          </div>
+        </div>
+
+        <div style="margin-top:1rem;" class="alert alert-info">
+          ℹ Las franjas se generan automáticamente a partir de los rangos del parámetro. Para el semestre 2026-1 deberían generarse <strong>38 franjas</strong> (35 L–V + 3 Sábado), de las cuales 6 quedan marcadas <code style="background:#1e3a8a44;padding:.1rem .3rem;border-radius:4px">esValida=false</code> (solapan con el mediodía).
+        </div>
+      </div>
+
+      <!-- ── GENERAR HORARIO ── -->
+      <div id="page-generar" class="page">
+        <div class="section-header">
+          <h3>Generar horario</h3>
+        </div>
+        <div class="form-card">
+          <h3>Motor Greedy — Parámetros de ejecución</h3>
+          <div class="form-grid-2" style="margin-bottom:1rem;">
+            <div>
+              <label class="form-label">Semestre</label>
+              <div class="form-value">2026-1</div>
+            </div>
+            <div>
+              <label class="form-label">Grupos a procesar</label>
+              <div class="form-value">6 grupos</div>
+            </div>
+            <div>
+              <label class="form-label">Máx. iteraciones</label>
+              <div class="form-value">10 000</div>
+            </div>
+            <div>
+              <label class="form-label">Timeout</label>
+              <div class="form-value">60 segundos</div>
+            </div>
+          </div>
+          <hr class="form-divider">
+          <div class="alert alert-warn" style="margin-bottom:1rem;">
+            ⚠ Requiere que <strong>franja_horaria</strong> tenga registros. Si la tabla está vacía, ve a <strong>Parámetros → Generar franjas</strong> primero.
+          </div>
+          <button class="btn btn-success" id="btn-generar" onclick="ejecutarGeneracion()" style="min-width:180px;">
+            ⚡ Generar horario
+          </button>
+          <div id="generar-result" class="generar-result"></div>
+        </div>
+
+        <div style="margin-top:1rem;" class="info-card">
+          <h3>Algoritmo: Greedy con evaluación escalonada</h3>
+          <div class="info-row-item"><span class="lbl">Prioridad P1</span><span class="val">Mayor número de inscritos</span></div>
+          <div class="info-row-item"><span class="lbl">Prioridad P2</span><span class="val">Mayor semestre del curso</span></div>
+          <div class="info-row-item"><span class="lbl">Prioridad P3</span><span class="val">Menos alternativas disponibles (MRV)</span></div>
+          <div class="info-row-item"><span class="lbl">Prioridad P4</span><span class="val">Orden original (estable)</span></div>
+          <div class="info-row-item"><span class="lbl">HC evaluadores</span><span class="val" style="color:var(--accent-green)">HC-01 a HC-10 — irrompibles</span></div>
+          <div class="info-row-item"><span class="lbl">SC evaluadores</span><span class="val" style="color:var(--accent-blue)">SC-01 y SC-02 — solo desempate</span></div>
+        </div>
+      </div>
+
+      <!-- ── HORARIO PÚBLICO ── -->
+      <div id="page-publico" class="page">
+        <div class="pub-topbar">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="logo-badge" style="width:34px;height:34px;font-size:.8rem;background:linear-gradient(135deg,#1d4ed8,#7c3aed);">UEB</div>
+            <h2>Horario Académico — Ingeniería de Sistemas</h2>
+          </div>
+          <span style="background:#dcfce7;color:#16a34a;padding:.3rem .8rem;border-radius:9999px;font-size:.75rem;font-weight:700;">2026-1 · PUBLICADO</span>
+        </div>
+        <div class="pub-body">
+          <div class="pub-filters">
+            <button class="pub-filter active">Todos</button>
+            <button class="pub-filter">Ana María López</button>
+            <button class="pub-filter">Carlos Rodríguez</button>
+            <button class="pub-filter">María Fernanda Torres</button>
+            <button class="pub-filter">Jorge Herrera</button>
+          </div>
+
+          <div class="pub-cal-header">
+            <div class="pub-cal-hcell">Hora</div>
+            <div class="pub-cal-hcell">Lunes</div>
+            <div class="pub-cal-hcell">Martes</div>
+            <div class="pub-cal-hcell">Miércoles</div>
+            <div class="pub-cal-hcell">Jueves</div>
+            <div class="pub-cal-hcell">Viernes</div>
+            <div class="pub-cal-hcell">Sábado</div>
+          </div>
+          <div class="pub-cal-body" id="pub-cal-body">
+            <!-- Filas generadas por JS -->
+          </div>
+
+          <div class="pub-empty-msg">
+            📅 El horario 2026-1 está <strong>publicado</strong> pero aún no tiene sesiones asignadas.<br>
+            Una vez que el motor Greedy genere el horario, las sesiones aparecerán aquí.
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CALENDARIO (próxima fase) ── -->
+      <div id="page-calendario" class="page">
+        <div class="coming-soon">
+          <div class="cs-icon">🗓️</div>
+          <h3>Calendario con Drag &amp; Drop</h3>
+          <p>
+            Esta vista permite al administrador mover sesiones entre franjas horarias.<br>
+            Cada movimiento es validado en tiempo real contra los 10 HC mediante WebSocket (STOMP).<br><br>
+            <strong style="color:var(--accent-blue)">Fase 4 — pendiente de implementación.</strong><br>
+            Requiere que Fase 3 (motor) esté completamente verificada.
+          </p>
+        </div>
+      </div>
+
+    </div><!-- content-area -->
+  </div><!-- main-wrap -->
+</div><!-- screen-app -->
+
+<!-- TOAST -->
+<div id="toast" style="
+  position:fixed; bottom:1.5rem; right:1.5rem;
+  background:#1e293b; border:1px solid #475569; border-radius:10px;
+  padding:.75rem 1.1rem; font-size:.85rem; color:#f1f5f9;
+  box-shadow:0 10px 30px rgba(0,0,0,.4); opacity:0;
+  transition:opacity .25s; pointer-events:none; z-index:999;
+"></div>
+
+<script>
+const API = 'http://localhost:8080';
+let jwtToken = null;
+let liveMode  = false;
+
+/* ─── LOGIN ─────────────────────────────────────── */
+async function doLogin() {
+  const btn  = document.getElementById('btn-login');
+  const user = document.getElementById('inp-user').value.trim();
+  const pass = document.getElementById('inp-pass').value.trim();
+  btn.innerHTML = '<span class="spinner"></span> Conectando…';
+  btn.disabled = true;
+  showLoginMsg('Conectando al backend…', 'info');
+  try {
+    const res = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: user, password: pass }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      jwtToken = data.token || data.accessToken;
+      liveMode = true;
+      showLoginMsg('✓ Autenticado correctamente', 'ok');
+      setTimeout(() => enterApp(true), 600);
+    } else {
+      showLoginMsg('Credenciales inválidas (backend respondió ' + res.status + ')', 'err');
+    }
+  } catch(e) {
+    showLoginMsg('Backend no disponible — entrando en modo demo', 'warn');
+    setTimeout(() => enterApp(false), 1000);
+  }
+  btn.innerHTML = 'Entrar al sistema';
+  btn.disabled = false;
+}
+
+function demoMode() {
+  showLoginMsg('Modo demo — datos del seed, sin backend', 'warn');
+  setTimeout(() => enterApp(false), 600);
+}
+
+function showLoginMsg(txt, type) {
+  const el = document.getElementById('login-msg');
+  el.style.display = 'block';
+  el.className = 'status-msg status-' + type;
+  el.textContent = txt;
+}
+
+function enterApp(live) {
+  liveMode = live;
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('screen-app').classList.add('visible');
+  updateApiStatus();
+  if (live) fetchLiveData();
+  buildCalPublico();
+}
+
+function updateApiStatus() {
+  const dot = document.getElementById('api-dot');
+  const txt = document.getElementById('api-status-txt');
+  if (liveMode) {
+    dot.style.background = '#10b981';
+    txt.textContent = 'Conectado — datos en vivo';
+  } else {
+    dot.style.background = '#f59e0b';
+    txt.textContent = 'Modo demo — datos del seed';
+  }
+}
+
+function logout() {
+  jwtToken = null; liveMode = false;
+  document.getElementById('screen-app').classList.remove('visible');
+  document.getElementById('screen-login').style.display = 'flex';
+  document.getElementById('login-msg').style.display = 'none';
+}
+
+/* ─── NAVIGATION ────────────────────────────────── */
+const TITLES = {
+  dashboard: 'Dashboard', docentes: 'Docentes', aulas: 'Aulas',
+  cursos: 'Cursos', grupos: 'Grupos', parametros: 'Parámetros del semestre',
+  publico: 'Vista Pública', generar: 'Generar Horario',
+};
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-' + page);
+  if (pg) pg.classList.add('active');
+  const nav = document.getElementById('nav-' + page);
+  if (nav) nav.classList.add('active');
+  document.getElementById('page-title').textContent = TITLES[page] || page;
+}
+
+/* ─── LIVE DATA ─────────────────────────────────── */
+async function fetchLiveData() {
+  try {
+    const headers = { Authorization: 'Bearer ' + jwtToken };
+    const [rd, ra, rc, rg] = await Promise.all([
+      fetch(`${API}/api/docentes`,  { headers }),
+      fetch(`${API}/api/aulas`,     { headers }),
+      fetch(`${API}/api/cursos`,    { headers }),
+      fetch(`${API}/api/grupos`,    { headers }),
+    ]);
+    if (rd.ok) {
+      const d = await rd.json();
+      document.getElementById('cnt-docentes').textContent = Array.isArray(d) ? d.length : '?';
+      renderDocentes(d);
+    }
+    if (ra.ok) { const d = await ra.json(); document.getElementById('cnt-aulas').textContent   = Array.isArray(d) ? d.length : '?'; }
+    if (rc.ok) { const d = await rc.json(); document.getElementById('cnt-cursos').textContent  = Array.isArray(d) ? d.length : '?'; }
+    if (rg.ok) { const d = await rg.json(); document.getElementById('cnt-grupos').textContent  = Array.isArray(d) ? d.length : '?'; }
+  } catch(e) {
+    console.warn('fetchLiveData error', e);
+  }
+}
+
+function renderDocentes(list) {
+  if (!Array.isArray(list) || !list.length) return;
+  const tbody = document.getElementById('tbl-docentes');
+  tbody.innerHTML = list.map(d => `
+    <tr>
+      <td><strong>${d.nombreCompleto || '—'}</strong></td>
+      <td>${d.numeroDocumento || '—'}</td>
+      <td><span class="badge-tc">${(d.tipoVinculacion||'').replace(/_/g,' ')}</span></td>
+      <td class="td-num">${d.horasMaxSemana || '—'}</td>
+      <td>${d.email || '—'}</td>
+      <td class="td-num">${d.totalDisponibilidades ?? '—'}</td>
+      <td class="td-num">${d.totalCompatibilidades ?? '—'}</td>
+    </tr>`).join('');
+}
+
+/* ─── GENERAR FRANJAS ───────────────────────────── */
+async function generarFranjas() {
+  if (!liveMode) { showToast('Requiere backend activo — inicia el servidor primero'); return; }
+  try {
+    const res = await fetch(`${API}/api/parametros/1/franjas`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + jwtToken }
+    });
+    if (res.ok) {
+      const txt = await res.text();
+      document.getElementById('franja-status').className = 'alert alert-ok';
+      document.getElementById('franja-status').innerHTML = '✓ ' + txt;
+      showToast('Franjas generadas correctamente');
+    } else {
+      showToast('Error ' + res.status + ' al generar franjas');
+    }
+  } catch(e) {
+    showToast('Error de conexión: ' + e.message);
+  }
+}
+
+/* ─── GENERAR HORARIO ───────────────────────────── */
+async function ejecutarGeneracion() {
+  const btn = document.getElementById('btn-generar');
+  const res_div = document.getElementById('generar-result');
+  if (!liveMode) { showToast('Requiere backend activo'); return; }
+  btn.innerHTML = '<span class="spinner"></span> Generando…';
+  btn.disabled = true;
+  res_div.style.display = 'none';
+  try {
+    const res = await fetch(`${API}/api/horarios/generar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + jwtToken },
+      body: JSON.stringify({ semestre: '2026-1' })
+    });
+    const data = await res.json();
+    res_div.style.display = 'block';
+    if (res.ok) {
+      res_div.innerHTML = `
+        <div style="color:var(--accent-green);font-weight:700;margin-bottom:.5rem;">✓ Generación completada</div>
+        <div>Asignaciones exitosas: <strong>${data.asignacionesExitosas ?? data.totalAsignaciones ?? '?'}</strong></div>
+        <div>Conflictos: <strong style="color:${(data.conflictos?.length||0)>0?'var(--accent-red)':'var(--accent-green)'}">
+          ${data.conflictos?.length ?? 0}</strong></div>
+        <div>Iteraciones: <strong>${data.iteraciones ?? '?'}</strong></div>
+        <div>Tiempo: <strong>${data.tiempoMs ?? '?'} ms</strong></div>
+      `;
+    } else {
+      res_div.innerHTML = `<div style="color:var(--accent-red)">Error ${res.status}: ${JSON.stringify(data)}</div>`;
+    }
+  } catch(e) {
+    res_div.style.display = 'block';
+    res_div.innerHTML = `<div style="color:var(--accent-red)">Error de conexión: ${e.message}</div>`;
+  }
+  btn.innerHTML = '⚡ Generar horario';
+  btn.disabled = false;
+}
+
+/* ─── CALENDARIO PÚBLICO (esqueleto vacío) ──────── */
+const FRANJAS = ['07:00','09:00','11:00','13:00','15:00','17:00','19:00','21:00'];
+function buildCalPublico() {
+  const body = document.getElementById('pub-cal-body');
+  body.innerHTML = FRANJAS.map(h => `
+    <div class="pub-cal-row">
+      <div class="pub-cal-time">${h}</div>
+      <div class="pub-cal-cell"></div>
+      <div class="pub-cal-cell"></div>
+      <div class="pub-cal-cell"></div>
+      <div class="pub-cal-cell"></div>
+      <div class="pub-cal-cell"></div>
+      <div class="pub-cal-cell">${h < '13:00' ? '' : ''}</div>
+    </div>`).join('');
+}
+
+/* ─── TOAST ─────────────────────────────────────── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.opacity = '0'; }, 3000);
+}
+
+/* ─── ENTER KEY ──────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('screen-login').style.display !== 'none') doLogin();
+});
+</script>
+</body>
+</html>
