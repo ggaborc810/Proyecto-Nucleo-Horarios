@@ -5,6 +5,7 @@ import AlertHC from '../ui/AlertHC';
 import { grupoService } from '../../services/grupoService';
 import { cursoService } from '../../services/cursoService';
 import { docenteService } from '../../services/docenteService';
+import { getErrorMessage } from '../../utils/errors';
 
 export default function GrupoForm({ grupo, onClose, onSaved }) {
   const [cursos, setCursos] = useState([]);
@@ -41,7 +42,7 @@ export default function GrupoForm({ grupo, onClose, onSaved }) {
       onSaved();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error guardando grupo');
+      setError(getErrorMessage(err, 'No se pudo guardar el grupo.'));
     } finally {
       setLoading(false);
     }

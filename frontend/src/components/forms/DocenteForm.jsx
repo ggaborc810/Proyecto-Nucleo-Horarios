@@ -3,6 +3,7 @@ import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import AlertHC from '../ui/AlertHC';
 import { docenteService } from '../../services/docenteService';
+import { getErrorMessage } from '../../utils/errors';
 
 export default function DocenteForm({ docente, onClose, onSaved }) {
   const [form, setForm] = useState({
@@ -30,7 +31,7 @@ export default function DocenteForm({ docente, onClose, onSaved }) {
       onSaved();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error guardando docente');
+      setError(getErrorMessage(err, 'No se pudo guardar el docente.'));
     } finally {
       setLoading(false);
     }

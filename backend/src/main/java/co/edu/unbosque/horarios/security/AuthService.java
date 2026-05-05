@@ -26,7 +26,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(username, password)
             );
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Credenciales inválidas");
+            throw new BadCredentialsException("Usuario o contraseña incorrectos.");
         }
         Usuario usuario = usuarioRepo.findByUsername(username).orElseThrow();
         String token = jwtUtil.generar(usuario);

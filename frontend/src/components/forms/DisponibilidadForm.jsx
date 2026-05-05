@@ -3,6 +3,7 @@ import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import AlertHC from '../ui/AlertHC';
 import { docenteService } from '../../services/docenteService';
+import { getErrorMessage } from '../../utils/errors';
 
 const DIAS = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
 
@@ -22,7 +23,7 @@ export default function DisponibilidadForm({ docenteId, onClose, onSaved }) {
       onSaved();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error guardando disponibilidad');
+      setError(getErrorMessage(err, 'No se pudo guardar la disponibilidad.'));
     } finally {
       setLoading(false);
     }

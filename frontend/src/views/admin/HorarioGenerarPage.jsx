@@ -7,6 +7,7 @@ import ConflictosTable from '../../components/tables/ConflictosTable';
 import { horarioService } from '../../services/horarioService';
 import api from '../../services/api';
 import { matchesSearch, normalizeSearch } from '../../utils/search';
+import { getErrorMessage } from '../../utils/errors';
 
 const SEMESTRE = '2026-1';
 const MIN_MATERIAS = 1;
@@ -63,7 +64,7 @@ export default function HorarioGenerarPage() {
       const data = await horarioService.generar(SEMESTRE, seleccionados);
       setResultado(data);
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error generando horario. Verifica que los grupos tengan docentes y franjas configuradas.');
+      setError(getErrorMessage(err, 'No se pudo generar el horario. Revisa grupos, docentes y franjas.'));
     } finally {
       setGenerando(false);
     }
@@ -75,7 +76,7 @@ export default function HorarioGenerarPage() {
       await horarioService.publicar(resultado.horarioId);
       navigate('/admin/horario');
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error publicando horario');
+      setError(getErrorMessage(err, 'No se pudo publicar el horario.'));
     }
   };
 

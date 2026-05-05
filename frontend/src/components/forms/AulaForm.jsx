@@ -3,6 +3,7 @@ import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import AlertHC from '../ui/AlertHC';
 import { aulaService } from '../../services/aulaService';
+import { getErrorMessage } from '../../utils/errors';
 
 export default function AulaForm({ aula, onClose, onSaved }) {
   const [tipos, setTipos] = useState([]);
@@ -38,7 +39,7 @@ export default function AulaForm({ aula, onClose, onSaved }) {
       onSaved();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error guardando aula');
+      setError(getErrorMessage(err, 'No se pudo guardar el aula.'));
     } finally {
       setLoading(false);
     }

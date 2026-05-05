@@ -96,7 +96,8 @@ public class ParametroSemestreService {
         LocalTime cursor = inicio;
         while (!cursor.plusHours(2).isAfter(fin)) {
             LocalTime horaValida = cursor.plusHours(2);
-            boolean solapa = cursor.isBefore(p.getExclusionFin())
+            boolean solapa = !"SABADO".equals(dia)
+                          && cursor.isBefore(p.getExclusionFin())
                           && horaValida.isAfter(p.getExclusionInicio());
             resultado.add(FranjaHoraria.builder()
                 .diaSemana(dia)

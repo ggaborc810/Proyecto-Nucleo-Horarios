@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import DataTable from '../../components/tables/DataTable';
-import Badge from '../../components/ui/Badge';
 import AlertHC from '../../components/ui/AlertHC';
 import ParametroSemestreForm from '../../components/forms/ParametroSemestreForm';
 import { parametroService } from '../../services/parametroService';
+import { getErrorMessage } from '../../utils/errors';
 
 export default function ParametrosPage() {
   const [parametros, setParametros] = useState([]);
@@ -20,8 +20,8 @@ export default function ParametrosPage() {
     try {
       const data = await parametroService.listar();
       setParametros(Array.isArray(data) ? data : [data]);
-    } catch {
-      setError('Error cargando parámetros');
+    } catch (err) {
+      setError(getErrorMessage(err, 'No se pudieron cargar los parámetros.'));
     } finally {
       setLoading(false);
     }
@@ -31,22 +31,29 @@ export default function ParametrosPage() {
 
   const columns = [
     { key: 'semestre', label: 'Semestre' },
-    { key: 'fechaInicioSemestre', label: 'Fecha inicio' },
-    { key: 'fechaFinSemestre', label: 'Fecha fin' },
     {
-      key: 'horaInicioJornada',
-      label: 'Jornada',
-      render: (row) => `${row.horaInicioJornada?.slice(0, 5)} – ${row.horaFinJornada?.slice(0, 5)}`,
+      key: 'jornadaLV',
+      label: 'Lun-vie',
+      render: (row) => `${row.franjaInicioLV?.slice(0, 5)} - ${row.franjaFinLV?.slice(0, 5)}`,
     },
     {
-      key: 'duracionSesionMinutos',
-      label: 'Sesión',
-      render: (row) => `${row.duracionSesionMinutos} min`,
+      key: 'jornadaSA',
+      label: 'Sábado',
+      render: (row) => `${row.franjaInicioSA?.slice(0, 5)} - ${row.franjaFinSA?.slice(0, 5)}`,
     },
     {
-      key: 'franjas',
-      label: 'Franjas',
-      render: (row) => `${row.totalFranjas ?? 0}`,
+      key: 'exclusion',
+      label: 'Exclusión',
+      render: (row) => `${row.exclusionInicio?.slice(0, 5)} - ${row.exclusionFin?.slice(0, 5)}`,
+    },
+    {
+      key: 'capMaxGrupo',
+      label: 'Cap. grupo',
+    },
+    {
+      key: 'activo',
+      label: 'Activo',
+      render: (row) => row.activo ? 'Sí' : 'No',
     },
   ];
 
@@ -63,7 +70,7 @@ export default function ParametrosPage() {
           data={parametros}
           actions={(row) => (
             <div className="flex gap-1 justify-end">
-              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setEditing(row); setShowForm(true); }}>✏️</Button>
+              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setEditing(row); setShowForm(true); }}>Editar</Button>
             </div>
           )}
         />

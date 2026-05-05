@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { horarioService } from '../services/horarioService';
 import api from '../services/api';
+import { getErrorMessage } from '../utils/errors';
 
 export function useCalendario(semestre) {
   const [horario, setHorario] = useState(null);
@@ -19,7 +20,7 @@ export function useCalendario(semestre) {
       setHorario(h);
       setFranjas(f.data ?? f);
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error cargando horario');
+      setError(getErrorMessage(err, 'No se pudo cargar el horario.'));
     } finally {
       setLoading(false);
     }

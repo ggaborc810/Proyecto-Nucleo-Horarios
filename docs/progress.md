@@ -26,6 +26,8 @@
 - ✅ Verificacion ejecutada: backend `mvnw test` OK (52 tests), frontend `npm run build` OK, backend dev OK, frontend dev OK.
 - ✅ Prueba API basica: login admin OK, `/api/auth/me` OK, `/api/docentes` sin token 401, `/api/docentes` con admin 200, vista publica 200.
 - ⚠ No se ejecuto `POST /api/horarios/generar` porque borra asignaciones previas del semestre antes de regenerar.
+- ✅ La BD ahora puede actualizarse al arrancar mediante Flyway, sin correr `db/init.sql` y `db/seed.sql` manualmente.
+- ✅ Se agrego `docker-compose.yml` para levantar PostgreSQL, backend y frontend en un solo comando.
 - ⬜ Siguen pendientes los tests automatizados de integracion, seguridad, rendimiento y aceptacion descritos en `specs/tests.md`.
 - ✅ No se hicieron cambios de logica ni se agregaron funcionalidades durante esta revision.
 

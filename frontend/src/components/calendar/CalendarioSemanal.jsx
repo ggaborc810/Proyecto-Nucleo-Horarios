@@ -4,6 +4,7 @@ import CeldaCalendario from './CeldaCalendario';
 import BloqueAsignacion from './BloqueAsignacion';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { asignacionService } from '../../services/asignacionService';
+import { getErrorMessage } from '../../utils/errors';
 
 const DIAS = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
 const DIAS_LABEL = { LUNES: 'Lun', MARTES: 'Mar', MIERCOLES: 'Mié', JUEVES: 'Jue', VIERNES: 'Vie', SABADO: 'Sáb' };
@@ -86,9 +87,8 @@ export default function CalendarioSemanal({ horario, franjas = [], readOnly = fa
       onUpdate?.();
     } catch (err) {
       const hc = err.response?.data?.error;
-      setError(hc
-        ? `Movimiento inválido (${hc}): ${err.response?.data?.mensaje}`
-        : 'No se pudo mover la asignación');
+      const mensaje = getErrorMessage(err, 'No se pudo mover la asignación.');
+      setError(hc ? `Movimiento inválido (${hc}): ${mensaje}` : mensaje);
     }
   };
 

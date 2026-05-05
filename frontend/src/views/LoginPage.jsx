@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import AlertHC from '../components/ui/AlertHC';
 import { authService } from '../services/authService';
+import { getErrorMessage } from '../utils/errors';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -27,8 +28,8 @@ export default function LoginPage() {
       else if (rol === 'DOCENTE') navigate('/docente', { replace: true });
       else if (rol === 'ESTUDIANTE') navigate('/estudiante', { replace: true });
       else navigate('/', { replace: true });
-    } catch {
-      setError('Usuario o contraseña incorrectos');
+    } catch (err) {
+      setError(getErrorMessage(err, 'Usuario o contraseña incorrectos.'));
     } finally {
       setLoading(false);
     }

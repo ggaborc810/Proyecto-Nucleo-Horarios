@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorDTO> handleBadCreds(BadCredentialsException e) {
         return ResponseEntity.status(401)
-            .body(new ErrorDTO("CREDENCIALES_INVALIDAS", e.getMessage(), null));
+            .body(new ErrorDTO("CREDENCIALES_INVALIDAS", "Usuario o contraseña incorrectos.", null));
     }
 
     @ExceptionHandler(HCVioladoException.class)
@@ -73,13 +73,13 @@ public class GlobalExceptionHandler {
             .map(FieldError::getDefaultMessage)
             .toList();
         return ResponseEntity.badRequest()
-            .body(new ErrorDTO("VALIDATION_ERROR", "Errores de validación", errores));
+            .body(new ErrorDTO("DATOS_INVALIDOS", "Datos inválidos. Revisa los campos.", errores));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTO> handleGenerico(Exception e) {
         log.error("Error no manejado", e);
         return ResponseEntity.status(500)
-            .body(new ErrorDTO("INTERNAL_ERROR", "Error interno del servidor", null));
+            .body(new ErrorDTO("ERROR_INTERNO", "Ocurrió un error interno. Intenta de nuevo.", null));
     }
 }

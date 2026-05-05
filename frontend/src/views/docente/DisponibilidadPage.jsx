@@ -4,6 +4,7 @@ import AlertHC from '../../components/ui/AlertHC';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
 import { docenteService } from '../../services/docenteService';
+import { getErrorMessage } from '../../utils/errors';
 
 const DIAS = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
 const DIAS_LABEL = {
@@ -44,7 +45,7 @@ function DisponibilidadModal({ inicial, onClose, onGuardado, docenteId }) {
       onGuardado();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error guardando disponibilidad');
+      setError(getErrorMessage(err, 'No se pudo guardar la disponibilidad.'));
     } finally {
       setLoading(false);
     }

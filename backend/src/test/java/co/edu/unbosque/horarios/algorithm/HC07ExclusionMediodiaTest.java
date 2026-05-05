@@ -35,6 +35,13 @@ class HC07ExclusionMediodiaTest {
     }
 
     @Test
+    void sabadoOnceATreceNoAplicaExclusion() {
+        assertTrue(evaluador.evaluate(
+            new AsignacionCandidato(null, null, null, franja(30, "SABADO", "11:00")),
+            ctxConParams()));
+    }
+
+    @Test
     void franjaVespertinaNoSolapa() {
         // 13:00-15:00 no solapa con 12:00-13:00 (exactamente al borde)
         assertTrue(evaluador.evaluate(

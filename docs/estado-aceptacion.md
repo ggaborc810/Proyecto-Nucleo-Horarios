@@ -30,10 +30,22 @@ Resultados:
 
 No se ejecuto `POST /api/horarios/generar` porque el servicio borra las asignaciones previas del horario del semestre antes de regenerar. Esa prueba debe hacerse de forma intencional cuando se acepte modificar datos de la BD de desarrollo.
 
+## Arranque con Docker
+
+El proyecto ahora incluye `docker-compose.yml` en la raiz con:
+
+- `postgres`
+- `backend`
+- `frontend`
+
+El frontend se expone en `http://localhost:5173` y proxya `/api` y `/ws` contra el backend.
+El backend toma `DB_URL=jdbc:postgresql://postgres:5432/horarios_db`, por lo que la BD se crea y se migra al levantar el stack.
+
 ## Verificado en codigo
 
 - Backend Spring Boot presente en `backend/`.
 - Frontend React/Vite presente en `frontend/`.
+- Migraciones automáticas configuradas con Flyway en `backend/src/main/resources/db/migration/`.
 - Motor Greedy implementado en `backend/src/main/java/co/edu/unbosque/horarios/service/algorithm/`.
 - Evaluadores HC implementados de HC-01 a HC-13.
 - Evaluadores SC implementados de SC-01 a SC-04.
@@ -83,6 +95,8 @@ No se ejecuto `POST /api/horarios/generar` porque el servicio borra las asignaci
 - El stack de frontend se documento como React 19 porque `frontend/package.json` usa React 19.
 - Se actualizo el indice para reflejar HC-01 a HC-13 y SC-01 a SC-04.
 - Se agregaron acciones correctivas para HC-11, HC-12 y HC-13 en `specs/api.md`.
+- La inicializacion de BD paso de scripts manuales a migraciones automáticas Flyway.
+- El arranque completo ya puede hacerse con Docker Compose en un solo comando.
 
 ## Desviaciones pendientes de decidir
 

@@ -21,6 +21,9 @@ public class ExclusionMediodiaEvaluator implements HCEvaluator {
             return Boolean.TRUE.equals(c.getFranja().getEsValida());
         }
         FranjaHoraria f = c.getFranja();
+        if ("SABADO".equals(f.getDiaSemana())) {
+            return true;
+        }
         // La sesión viola HC-07 si solapa con el rango de exclusión
         boolean solapa = f.getHoraInicio().isBefore(p.getExclusionFin())
                       && f.getHoraValida().isAfter(p.getExclusionInicio());

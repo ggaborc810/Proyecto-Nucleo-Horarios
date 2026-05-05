@@ -4,6 +4,7 @@ import Button from '../ui/Button';
 import AlertHC from '../ui/AlertHC';
 import { cursoService } from '../../services/cursoService';
 import { aulaService } from '../../services/aulaService';
+import { getErrorMessage } from '../../utils/errors';
 
 export default function CursoForm({ curso, onClose, onSaved }) {
   const [tipos, setTipos] = useState([]);
@@ -36,7 +37,7 @@ export default function CursoForm({ curso, onClose, onSaved }) {
       onSaved();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.mensaje || 'Error guardando curso');
+      setError(getErrorMessage(err, 'No se pudo guardar el curso.'));
     } finally {
       setLoading(false);
     }

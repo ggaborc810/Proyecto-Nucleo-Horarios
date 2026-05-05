@@ -1,0 +1,25 @@
+# Logs
+*.log
+backend-dev.log
+frontend-dev.log
+backend_log.txt
+
+# Java/Maven build output
+backend/target/
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+
+# Local environment files
+.env
+.env.*
+
+# IDE/editor files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+Thumbs.db
+.DS_Store
