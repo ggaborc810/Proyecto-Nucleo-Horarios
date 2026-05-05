@@ -159,7 +159,38 @@ La base de datos queda disponible localmente en:
 localhost:5432
 
 
-8. Apagar la aplicacion
+8. Perfiles de prueba
+---------------------
+La base de datos inicial crea usuarios de prueba para entrar al sistema.
+
+La contraseña para todos estos perfiles es:
+
+admin123
+
+Administrador:
+
+| Perfil | Usuario | Contraseña |
+| ------ | ------- | ---------- |
+| Administrador | admin | admin123 |
+
+Docentes:
+
+| Perfil | Usuario | Contraseña |
+| ------ | ------- | ---------- |
+| Docente | c.rodriguez | admin123 |
+| Docente | c.ramirez | admin123 |
+| Docente | d.castro | admin123 |
+
+Estudiantes de Ingeniería de Sistemas:
+
+| Perfil | Usuario | Contraseña |
+| ------ | ------- | ---------- |
+| Estudiante Sistemas 1 | est.sistemas.1 | admin123 |
+| Estudiante Sistemas 2 | est.sistemas.2 | admin123 |
+| Estudiante Sistemas 3 | est.sistemas.3 | admin123 |
+
+
+9. Apagar la aplicacion
 -----------------------
 Desde la carpeta raiz del proyecto, ejecutar:
 
@@ -168,7 +199,7 @@ docker compose down
 Esto apaga los contenedores, pero conserva la base de datos en el volumen de Docker.
 
 
-9. Volver a iniciar la aplicacion
+10. Volver a iniciar la aplicacion
 ---------------------------------
 Si ya se habia construido antes, se puede iniciar con:
 
@@ -179,7 +210,7 @@ Si hubo cambios en el codigo, usar:
 docker compose up -d --build
 
 
-10. Ver logs si algo falla
+11. Ver logs si algo falla
 --------------------------
 Ver logs de todos los servicios:
 
@@ -198,7 +229,7 @@ Ver logs del frontend:
 docker logs horarios-frontend
 
 
-11. Problemas comunes
+12. Problemas comunes
 ---------------------
 
 Problema:
@@ -279,7 +310,7 @@ Solucion:
 3. Confirmar que horarios-postgres este healthy.
 
 
-12. Probar desde otro computador en la misma red
+13. Probar desde otro computador en la misma red
 ------------------------------------------------
 Si el proyecto esta corriendo en un computador y otra persona quiere entrar desde otro PC
 en la misma red:
@@ -301,7 +332,7 @@ en la misma red:
 4. Si no abre, revisar el Firewall de Windows y permitir conexiones al puerto 5173.
 
 
-13. Comandos principales
+14. Comandos principales
 ------------------------
 Levantar todo construyendo imagenes:
 
@@ -324,7 +355,7 @@ Apagar y borrar volumenes:
 docker compose down -v
 
 
-14. Estado correcto final
+15. Estado correcto final
 -------------------------
 La aplicacion esta correctamente desplegada cuando:
 
@@ -338,4 +369,3 @@ La aplicacion esta correctamente desplegada cuando:
 3. El navegador puede abrir:
 
    http://localhost:5173
-
